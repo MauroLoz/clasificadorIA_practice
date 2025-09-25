@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Email AI Classifier</title>
+</head>
+<body>
+    <div class="mailForm_container">
+        <div class="mailForm_header">
+            <div class="mailForm_header_icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-mail w-6 h-6 text-white">
+                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                </svg>
+            </div>
+    
+            <div class="mailForm_header_text">
+                <h1 id="titulo">Clasificador de Correos IA</h1>
+                <small id="subtitulo">Análisis inteligente de correos electrónicos</small>
+            </div>
+    
+            <div style="margin-left:auto;">
+                <button id="btn-lang">
+                    🇪🇸
+                </button>
+            </div>
+        </div>
+        
+        <form id="mailForm" method="POST" enctype="multipart/form-data" style="padding: 1.5rem;">
+            <div class="mailForm_textarea">
+                <label id="lbl-contenido">Contenido del correo</label>
+                <textarea id="textarea-correo" name="correo_texto" rows="10" cols="50"
+                    placeholder="Pega aquí el contenido del correo electrónico que quieres clasificar..."></textarea>
+            </div>
+    
+            <div class="mailForm_file">
+                <label id="lbl-archivo">O cargar archivo</label>
+                <input type="file" name="correo_archivo" accept=".txt,.pdf" id="file-upload">
+                <div class="mailForm_file_input">
+                    <label for="file-upload" id="file-label-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3v12"></path><path d="m17 8-5-5-5 5"></path>
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        </svg>
+                        <p id="file-text">Haz clic para seleccionar un archivo</p>
+                        <small id="file-format">Formatos: .txt, .pdf</small>
+                    </label>
+                </div>
+            </div>
+    
+            <div class="mailForm_buttons">
+                <button type="submit" class="btn-enviar" id="btn-enviar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-send w-5 h-5" aria-hidden="true">
+                        <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path>
+                        <path d="m21.854 2.147-10.94 10.939"></path>
+                    </svg>
+                    <span id="btn-enviar-text">Clasificar correo</span>
+                </button>
+                <button type="button" class="btn-limpiar" id="btn-limpiar">Limpiar</button>
+            </div>
+        </form>
+
+        {% if resultado %}
+        <div class="mailForm_email">
+                <div class="mailForm_email_header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    </svg>
+                    <label id="lbl-resultado-contenido">Contenido del correo</label>
+                </div>
+                <pre>{{ resultado.contenido }}</pre>
+        </div>
+        {% endif %}
+
+        {% if resultado %}
+        <div class="mailForm_response">
+                <div class="mailForm_response_header">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">                           
+                        </path></svg>
+                        <label id="lbl-respuesta-sugerida">Respuesta sugerida</label>
+                    </div>
+                    <div>
+                        <label id="lbl-categoria" data-categoria="{{ resultado.categoria }}">Categoría: {{ resultado.categoria }}</label>
+                    </div>
+                </div>
+    
+                <pre id="respuesta-texto">{{ resultado.respuesta }}</pre>   
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="static/js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap" rel="stylesheet">
+</body>
+</html>
