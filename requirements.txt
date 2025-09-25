@@ -1,6 +1,7 @@
 flask
 transformers
 torch
+gunicorn
 scikit-learn
 pdfplumber
 google-genai
