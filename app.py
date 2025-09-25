@@ -2,12 +2,10 @@
 # Importações necessárias
 # Necessary imports
 import os
+import re
 import pdfplumber
 from flask import Flask, render_template, request
-from transformers import pipeline
 from google import genai
-import spacy
-import es_core_news_sm
 
 # Crear aplicación Flask y definir carpeta uploads para guardar archivos
 # Criar aplicação Flask e definir pasta uploads para salvar arquivos
@@ -23,27 +21,20 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.environ["GEMINI_API_KEY"] = "AIzaSyBmS_Ev4l9jlK1Nh2RnWfpY3uwWdpy38vk"
 client = genai.Client()
 
-nlp = es_core_news_sm.load()
-
 # Función para procesar el texto (PNL)
 # Função para processar o texto (PNL)
 # Function to process text (NLP)
 def preprocesar_texto(texto: str) -> str:
     """
-    Preprocesa el texto:
-    - Pasa a minúsculas
-    - Tokeniza con spaCy
-    - Elimina stopwords, signos de puntuación y espacios
-    - Lematiza las palabras
-    - Devuelve el texto limpio
+    Preprocesamiento ligero para reducir uso de memoria:
+    - Minúsculas
+    - Elimina caracteres no alfanuméricos básicos
+    - Normaliza espacios
     """
-    doc = nlp(texto.lower())
-    tokens_limpios = [
-        token.lemma_
-        for token in doc
-        if not token.is_stop and not token.is_punct and not token.is_space
-    ]
-    return " ".join(tokens_limpios)
+    texto = texto.lower()
+    texto = re.sub(r"[^a-záéíóúñü0-9\s]", " ", texto, flags=re.IGNORECASE)
+    texto = re.sub(r"\s+", " ", texto).strip()
+    return texto
 
 # Funcion donde se define el prompt para consultar a la IA y que clasifique el correo
 # Função onde se define o prompt para consultar a IA e classificar o e-mail
@@ -120,8 +111,14 @@ def index():
 
             elif archivo.filename.endswith(".pdf"):
                 with pdfplumber.open(ruta_archivo) as pdf:
-                    for pagina in pdf.pages:
-                        contenido += pagina.extract_text() or ""
+                    # Limitar a primeras 5 páginas y tamaño de texto para ahorrar memoria
+                    max_pages = 5
+                    max_chars = 20000
+                    for idx, pagina in enumerate(pdf.pages[:max_pages]):
+                        contenido += (pagina.extract_text() or "")
+                        if len(contenido) >= max_chars:
+                            contenido = contenido[:max_chars]
+                            break
 
             else:
                 contenido = "Formato no soportado."

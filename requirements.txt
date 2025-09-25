@@ -1,9 +1,4 @@
 flask
-transformers
-torch
 gunicorn
-scikit-learn
 pdfplumber
 google-genai
-spacy
-es-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0.tar.gz

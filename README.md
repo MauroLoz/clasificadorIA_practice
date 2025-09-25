@@ -36,24 +36,16 @@ Practice/
 If your `requirements.txt` does not include these libraries yet, add the following lines:
 
 flask
-transformers
-torch
-scikit-learn
+gunicorn
 pdfplumber
 google-genai
-spacy
 
 Then install:
 
 pip install -r requirements.txt
 
 
-### 2) Download spaCy model (Spanish)
-
-python -m spacy download es_core_news_sm
-
-
-### 3) Configure Gemini API Key
+### 2) Configure Gemini API Key
 Get your API Key from Google AI Studio and export it as an environment variable (recommended). In PowerShell:
 
 $env:GEMINI_API_KEY = "YOUR_API_KEY"
@@ -61,7 +53,7 @@ $env:GEMINI_API_KEY = "YOUR_API_KEY"
 Note: In `app.py` there is a line that sets the variable in code. For best practices, remove that assignment and rely on the environment variable.
 
 
-### 4) Run the application
+### 3) Run the application
 
 python app.py
 
@@ -82,9 +74,15 @@ The app will start in development mode at: `http://127.0.0.1:5000/`
 
 
 ### Troubleshooting
-- spaCy: if you see `OSError: [E050] Can't find model 'es_core_news_sm'`, run: `python -m spacy download es_core_news_sm`.
 - Gemini authentication: if you get authentication errors, ensure `GEMINI_API_KEY` is set in the same PowerShell session where you run `python app.py`.
 - PDF without text: some PDFs are scans (images). `pdfplumber` does not perform OCR. Consider converting to text first.
+
+
+### Deploy on Render (Free tier tips)
+- Use a Web Service with Build Command: `pip install -r requirements.txt`.
+- Start Command is taken from `Procfile`: `web: gunicorn app:app --workers=1 --threads=2 --timeout=120`.
+- Environment: add `GEMINI_API_KEY`.
+- Memory: this project is tuned for 512Mi by removing heavy NLP models and limiting PDF parsing. If you still hit OOM, reduce `--threads` to 1 and ensure uploaded PDFs are small (< 5 pages).
 
 
 ### Development
