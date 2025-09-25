@@ -10,28 +10,11 @@ document.getElementById("file-upload").addEventListener("change", function() {
     }
 });
 
-// Funcion para limpar campos 
-// Função para limpar campos
-// Function to clear fields
+// Funcion para reiniciar completamente la app (recargar la página)
+// Função para reiniciar completamente o app (recarregar a página)
+// Function to fully reset the app (reload the page)
 document.getElementById("btn-limpiar").addEventListener("click", function() {
-    const form = document.getElementById("mailForm");
-    form.reset();
-
-    const fileLabel = document.getElementById("file-label-content");
-    fileLabel.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-             viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-             class="lucide lucide-upload w-8 h-8 text-gray-400 mx-auto mb-2">
-            <path d="M12 3v12"></path>
-            <path d="m17 8-5-5-5 5"></path>
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        </svg>
-        <p>Haz clic para seleccionar un archivo</p>
-        <small>Formatos: .txt, .eml, .msg</small>
-    `;
-
-    document.querySelectorAll(".mailForm_email, .mailForm_response").forEach(el => el.remove());
+    window.location.reload();
 });
 
 // Funcion para la traduccion de la app en 3 idiomas, Español, Portogues, Ingles
