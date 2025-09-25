@@ -6,6 +6,8 @@ import re
 import pdfplumber
 from flask import Flask, render_template, request
 from google import genai
+from dotenv import load_dotenv
+load_dotenv()
 
 # Crear aplicación Flask y definir carpeta uploads para guardar archivos
 # Criar aplicação Flask e definir pasta uploads para salvar arquivos
@@ -18,7 +20,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Definir API Key de IA Gemini
 # Definir API Key da IA Gemini
 # Define Gemini AI API Key
-os.environ["GEMINI_API_KEY"] = "AIzaSyBmS_Ev4l9jlK1Nh2RnWfpY3uwWdpy38vk"
 client = genai.Client()
 
 # Función para procesar el texto (PNL)

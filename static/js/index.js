@@ -10,11 +10,12 @@ document.getElementById("file-upload").addEventListener("change", function() {
     }
 });
 
-// Funcion para reiniciar completamente la app (recargar la página)
-// Função para reiniciar completamente o app (recarregar a página)
-// Function to fully reset the app (reload the page)
+// Funcion para reiniciar completamente la app con navegación limpia (GET)
+// Função para reiniciar completamente o app com navegação limpa (GET)
+// Function to fully reset the app via clean navigation (GET)
 document.getElementById("btn-limpiar").addEventListener("click", function() {
-    window.location.reload();
+    const url = window.location.pathname + "?reset=" + Date.now();
+    window.location.replace(url);
 });
 
 // Funcion para la traduccion de la app en 3 idiomas, Español, Portogues, Ingles
