@@ -7,6 +7,7 @@ from flask import Flask, render_template, request
 from transformers import pipeline
 from google import genai
 import spacy
+import es_core_news_sm
 
 # Crear aplicación Flask y definir carpeta uploads para guardar archivos
 # Criar aplicação Flask e definir pasta uploads para salvar arquivos
@@ -22,7 +23,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.environ["GEMINI_API_KEY"] = "AIzaSyBmS_Ev4l9jlK1Nh2RnWfpY3uwWdpy38vk"
 client = genai.Client()
 
-nlp = spacy.load("es_core_news_sm")
+nlp = es_core_news_sm.load()
 
 # Función para procesar el texto (PNL)
 # Função para processar o texto (PNL)
