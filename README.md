@@ -21,7 +21,6 @@ Practice/
   entrenar_modelo.py
   modelo_clasificacion.pkl
   mails_training.csv
-  models/
   static/
     css/
       index.css

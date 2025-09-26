@@ -3,8 +3,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 import joblib
-import nltk
-from nltk.corpus import stopwords
 
 # Importamos el CSV de entrenamiento
 # Importamos o CSV de treinamento
