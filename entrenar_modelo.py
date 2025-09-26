@@ -28,5 +28,3 @@ modelo.fit(X, y)
 # Salvamos o modelo treinado
 # Save the trained model
 joblib.dump(modelo, "modelo_clasificacion.pkl")
-
-print("✅ Modelo entrenado y guardado en modelo_clasificacion.pkl")
