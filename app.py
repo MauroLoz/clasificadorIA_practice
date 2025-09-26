@@ -23,18 +23,16 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Define Gemini AI API Key
 client = genai.Client()
 
+# cargamos el modelo entrenado
+# carregamos o modelo treinado
+# load the trained model
 modelo = joblib.load("modelo_clasificacion.pkl")
 
 # Función para procesar el texto (PNL)
 # Função para processar o texto (PNL)
 # Function to process text (NLP)
 def preprocesar_texto(texto: str) -> str:
-    """
-    Preprocesamiento ligero para reducir uso de memoria:
-    - Minúsculas
-    - Elimina caracteres no alfanuméricos básicos
-    - Normaliza espacios
-    """
+
     texto = texto.lower()
     texto = re.sub(r"[^a-záéíóúñü0-9\s]", " ", texto, flags=re.IGNORECASE)
     texto = re.sub(r"\s+", " ", texto).strip()
