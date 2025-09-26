@@ -8,6 +8,7 @@ from flask import Flask, render_template, request
 from google import genai
 from dotenv import load_dotenv
 load_dotenv()
+import joblib
 
 # Crear aplicación Flask y definir carpeta uploads para guardar archivos
 # Criar aplicação Flask e definir pasta uploads para salvar arquivos
@@ -21,6 +22,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Definir API Key da IA Gemini
 # Define Gemini AI API Key
 client = genai.Client()
+
+modelo = joblib.load("modelo_clasificacion.pkl")
 
 # Función para procesar el texto (PNL)
 # Função para processar o texto (PNL)
@@ -40,19 +43,26 @@ def preprocesar_texto(texto: str) -> str:
 # Funcion donde se define el prompt para consultar a la IA y que clasifique el correo
 # Função onde se define o prompt para consultar a IA e classificar o e-mail
 # Function where the prompt is defined to query AI and classify the email
-def clasificar_correo(texto):
-    prompt = f"""
-    Clasifica el siguiente correo electrónico como "Productivo" o "Improductivo".
-    Devuelve solo la categoría como texto plano.
+# def clasificar_correo(texto):
+    # prompt = f"""
+    # Clasifica el siguiente correo electrónico como "Productivo" o "Improductivo".
+    # Devuelve solo la categoría como texto plano.
     
-    Correo:
-    {texto}
-    """
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
-    )
-    return response.text.strip()
+    # Correo:
+    # {texto}
+    #"""
+    # response = client.models.generate_content(
+        # model="gemini-2.5-flash",
+        # contents=prompt
+    # )
+    # return response.text.strip()
+
+# Funcion del clasificador de correos 
+# Função de classificação de correspondência
+# Mail sorter function
+def clasificar_correo(texto):
+    return modelo.predict([texto])[0]
+
 
 # Funcion donde se define el prompt para generar respuesta de acuerdo al correo ingresado
 # Função onde se define o prompt para gerar resposta de acordo com o e-mail inserido
@@ -75,7 +85,7 @@ def generar_respuesta(texto, categoria):
         model="gemini-2.5-flash",
         contents=prompt
     )
-    return response.text.strip()
+    return response.text.strip() 
 
 # ruta global /
 # rota global /

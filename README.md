@@ -1,21 +1,26 @@
 ## AI Email Classifier (Flask)
 
 Flask web application that:
-- Classifies emails as Productive/Unproductive using Gemini (google-genai)
+- Classifies emails as Productive/Unproductive using a trained machine learning model
 - Generates a suggested reply
 - Allows entering text or uploading .txt/.pdf files
+- Includes a model trainer script for custom training
 
 
 ### Requirements
 - Python 3.10+ recommended
 - Pip
-- Google AI Studio (Gemini) account and API Key
+- scikit-learn (for machine learning model)
+- pandas (for data handling)
 
 
 ### Project structure
 ```
 Practice/
   app.py
+  entrenar_modelo.py
+  modelo_clasificacion.pkl
+  mails_training.csv
   models/
   static/
     css/
@@ -33,25 +38,22 @@ Practice/
 
 
 ### 1) Dependencies
-If your `requirements.txt` does not include these libraries yet, add the following lines:
-
-flask
-gunicorn
-pdfplumber
-google-genai
-
-Then install:
+Install the required libraries:
 
 pip install -r requirements.txt
 
+### 2) Train the Model (IMPORTANT - Run this first!)
+Before running the application, you must train the machine learning model:
 
-### 2) Configure Gemini API Key
-Get your API Key from Google AI Studio and export it as an environment variable (recommended). In PowerShell:
+python entrenar_modelo.py
 
-$env:GEMINI_API_KEY = "YOUR_API_KEY"
+This will create `modelo_clasificacion.pkl` which is required by the application.
 
-Note: In `app.py` there is a line that sets the variable in code. For best practices, remove that assignment and rely on the environment variable.
-
+#### Customizing the Training Data
+- Edit `entrenar_modelo.py` to add more training examples
+- The current dataset includes basic examples of productive/unproductive emails
+- You can replace the data dictionary with your own examples or load from a CSV file
+- More training data generally leads to better classification accuracy
 
 ### 3) Run the application
 
@@ -71,18 +73,19 @@ The app will start in development mode at: `http://127.0.0.1:5000/`
 - Uploaded files are stored in the `uploads/` folder.
 - `pdfplumber` is used to extract text from PDFs in a simple way.
 - The frontend includes `static/js/index.js` for form clearing and language switching, and `static/css/index.css` for styles.
+- The model uses scikit-learn with TF-IDF vectorization and Logistic Regression for classification.
 
 
 ### Troubleshooting
-- Gemini authentication: if you get authentication errors, ensure `GEMINI_API_KEY` is set in the same PowerShell session where you run `python app.py`.
+- Model not found: Make sure you run `python entrenar_modelo.py` before starting the app.
 - PDF without text: some PDFs are scans (images). `pdfplumber` does not perform OCR. Consider converting to text first.
+- Training data: You can modify `entrenar_modelo.py` to use your own training data or add more examples to improve accuracy.
 
 
 ### Deploy on Render (Free tier tips)
-- Use a Web Service with Build Command: `pip install -r requirements.txt`.
+- Use a Web Service with Build Command: `pip install -r requirements.txt && python entrenar_modelo.py`.
 - Start Command is taken from `Procfile`: `web: gunicorn app:app --workers=1 --threads=2 --timeout=120`.
-- Environment: add `GEMINI_API_KEY`.
-- Memory: this project is tuned for 512Mi by removing heavy NLP models and limiting PDF parsing. If you still hit OOM, reduce `--threads` to 1 and ensure uploaded PDFs are small (< 5 pages).
+- Memory: this project is tuned for 512Mi by using lightweight ML models and limiting PDF parsing. If you still hit OOM, reduce `--threads` to 1 and ensure uploaded PDFs are small (< 5 pages).
 
 
 ### Development
